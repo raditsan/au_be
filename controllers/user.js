@@ -37,7 +37,7 @@ module.exports = {
         if (!user) {
           return res.status(404).send({
             success: false,
-            message: 'User Not Found',
+            message: 'Data Not Found',
           });
         }
         return res.status(200).send({

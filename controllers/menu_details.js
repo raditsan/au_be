@@ -1,10 +1,10 @@
 const uuid = require('uuid');
-const Role = require('../models').Role;
+const Menu = require('../models').MenuDetail;
 
 module.exports = {
   list(req, res) {
     const {page, size} = req.params
-    return Role
+    return Menu
       .findAndCountAll({
         include: [],
         order: [
@@ -12,11 +12,11 @@ module.exports = {
         ],
         offset: (page - 1) * size, limit: size
       })
-      .then((users) => {
+      .then((results) => {
         res.status(200).send({
           success: true,
-          items: users.rows,
-          totalCount: users.count
+          items: results.rows,
+          totalCount: results.count
         })
       })
       .catch((error) => {
@@ -28,9 +28,9 @@ module.exports = {
   },
   //
   getById(req, res) {
-    return Role.findOne({
+    return Menu.findOne({
       where: {
-        role_id: req.params.role_id}
+        menu_detail_id: req.params.menu_detail_id}
     })
       .then((result) => {
         if (!result) {
@@ -41,22 +41,22 @@ module.exports = {
         }
         return res.status(200).send({
           success: true,
-          role: result
+          menu: result
         });
       })
       .catch((error) => res.status(400).send(error));
   },
   add(req, res) {
-    return Role
+    return Menu
       .create({
-        role_id: uuid.v4(),
-        role_name:req.body.role_name,
-        user_create_id:req.body.user_create_id
+        menu_detail_id: uuid.v4(),
+        menu_id:req.body.menu_id,
+        role_id:req.body.role_id
       })
-      .then((role) => {
+      .then((results) => {
         res.status(201).send({
           success: true,
-          role
+          menuDetail: results
         })
       })
       .catch((error) => res.status(400).send({
@@ -86,10 +86,10 @@ module.exports = {
   //     .catch((error) => res.status(400).send(error));
   // },
   delete(req, res) {
-    return Role
+    return Menu
       .destroy({
         where: {
-          role_id: req.params.user_id}
+          menu_detail_id: req.params.menu_detail_id}
       })
       .then(rowDelete => {
         res.status(200).send({
